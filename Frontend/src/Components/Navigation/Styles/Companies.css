@@ -1,0 +1,61 @@
+/* Companies.css */
+
+.companies-container {
+  padding: 2rem;
+  background-color: #f9fafb;
+  min-height: 100vh;
+  text-align: center;
+}
+
+.companies-container h2 {
+  font-size: 2rem;
+  color: #111827;
+  margin-bottom: 1.5rem;
+}
+
+.company-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.5rem;
+  padding: 0 1rem;
+}
+
+.company-card {
+  background-color: #fff;
+  padding: 1rem;
+  border-radius: 12px;
+  text-decoration: none;
+  color: inherit;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: 1px solid #e5e7eb;
+}
+
+.company-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+}
+
+.company-logo {
+  width: 60px;
+  height: 60px;
+  object-fit: contain;
+  margin-bottom: 1rem;
+}
+
+.company-content h3 {
+  font-size: 1.1rem;
+  margin: 0.2rem 0;
+  color: #1f2937;
+}
+
+.company-overview {
+  font-size: 0.85rem;
+  color: #6b7280;
+  margin-top: 0.3rem;
+  text-align: center;
+}
