@@ -1,11 +1,6 @@
 <h1 align="center">🚀 Placify</h1>
 <h3 align="center">Campus Placement Management System (Full Stack)</h3>
 
-<p align="center">
-  <a href="https://github.com/ujjawal-singh1/Placify"><img src="https://img.shields.io/github/stars/ujjawal-singh1/Placify?style=for-the-badge" alt="GitHub stars"></a>
-  <a href="https://github.com/ujjawal-singh1/Placify"><img src="https://img.shields.io/github/forks/ujjawal-singh1/Placify?style=for-the-badge" alt="GitHub forks"></a>
-  <a href="https://github.com/ujjawal-singh1/Placify"><img src="https://img.shields.io/github/issues/ujjawal-singh1/Placify?style=for-the-badge" alt="GitHub issues"></a>
-</p>
 
 ---
 
