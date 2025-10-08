@@ -1,8 +1,17 @@
-# 🚀 Placify — Campus Placement Management System (Full Stack)
+<h1 align="center">🚀 Placify</h1>
+<h3 align="center">Campus Placement Management System (Full Stack)</h3>
+
+<p align="center">
+  <a href="https://github.com/ujjawal-singh1/Placify"><img src="https://img.shields.io/github/stars/ujjawal-singh1/Placify?style=for-the-badge" alt="GitHub stars"></a>
+  <a href="https://github.com/ujjawal-singh1/Placify"><img src="https://img.shields.io/github/forks/ujjawal-singh1/Placify?style=for-the-badge" alt="GitHub forks"></a>
+  <a href="https://github.com/ujjawal-singh1/Placify"><img src="https://img.shields.io/github/issues/ujjawal-singh1/Placify?style=for-the-badge" alt="GitHub issues"></a>
+</p>
+
+---
 
 ## 📘 Overview
-**Placify** is a full-stack placement management system built with **React (frontend)**, **Spring Boot (backend)**, and **MongoDB (database)**.  
-It helps **students, recruiters, and admins** efficiently manage the campus placement process from registration to selection, including a **Quiz Module** to assess student skills.
+**Placify** is a **full-stack placement management system** built with **React (frontend)**, **Spring Boot (backend)**, and **MongoDB (database)**.  
+It helps **students, recruiters, and admins** efficiently manage campus placement workflows, and includes a **Quiz Module** to assess student skills.
 
 ---
 
@@ -18,42 +27,41 @@ It helps **students, recruiters, and admins** efficiently manage the campus plac
 ## 🧩 Key Features
 
 ### 👨‍🎓 Student Module
-- Register, log in, and manage profiles.  
-- Browse placement drives and apply for jobs.  
-- Track application status and placement results.  
-- Attempt quizzes to evaluate technical and aptitude skills.
+- Register, log in, and manage profiles  
+- Browse placement drives and apply for jobs  
+- Track application status and placement results  
+- Attempt quizzes to evaluate technical and aptitude skills  
 
 ### 🏢 Company Module
-- Post job openings with eligibility filters.  
-- View eligible students and shortlist candidates.  
-- Manage interviews and selection results.
+- Post job openings with eligibility filters  
+- View eligible students and shortlist candidates  
+- Manage interviews and selection results  
 
 ### 🧑‍💼 Admin Module
-- Approve or reject student & company registrations.  
-- Manage placement schedules and announcements.  
-- Generate reports and analytics dashboards.  
-- Create and manage quizzes for students.
+- Approve/reject student & company registrations  
+- Manage placement schedules and announcements  
+- Generate reports and analytics dashboards  
+- Create and manage quizzes for students  
 
 ### 📝 Quiz Module
-- Admin can create quizzes with multiple-choice questions.  
-- Students can attempt quizzes and get instant results.  
-- Quiz results can be used for shortlisting candidates.  
-- Supports technical, aptitude, and domain-specific quizzes.
+- Admin can create multiple-choice quizzes  
+- Students can attempt quizzes and get instant results  
+- Quiz results help in candidate shortlisting  
+- Supports technical, aptitude, and domain-specific quizzes  
 
 ---
 
 ## ⚙️ Tech Stack
 
-| Layer | Technology |
-|-------|------------|
-| Frontend | React.js, HTML5, CSS3, JavaScript, Bootstrap / Tailwind CSS |
-| Backend Framework | Spring Boot (Java 17+) |
-| Database | MongoDB |
-| ORM/ODM Tool | Spring Data MongoDB |
-| Security | Spring Security & JWT Authentication |
-| REST APIs | Spring Web |
-| Server | Embedded Tomcat |
-| Version Control | Git & GitHub |
+<p align="left">
+  <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/react/react-original.svg" alt="React" width="50" height="50"/>
+  <img src="https://www.vectorlogo.zone/logos/springio/springio-icon.svg" alt="Spring Boot" width="50" height="50"/>
+  <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/mongodb/mongodb-original.svg" alt="MongoDB" width="50" height="50"/>
+  <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/java/java-original.svg" alt="Java" width="50" height="50"/>
+  <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/html5/html5-original.svg" alt="HTML5" width="50" height="50"/>
+  <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/css3/css3-original.svg" alt="CSS3" width="50" height="50"/>
+  <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/javascript/javascript-original.svg" alt="JS" width="50" height="50"/>
+</p>
 
 ---
 
@@ -67,8 +75,7 @@ Placify/
 │ │ ├── repository/ <-- MongoDB repositories
 │ │ ├── model/ <-- @Document classes (includes Quiz models)
 │ │ └── PlacifyApplication.java
-│ └── src/main/resources/
-│ └── application.properties
+│ └── src/main/resources/application.properties
 ├── frontend/
 │ ├── public/
 │ └── src/
@@ -80,55 +87,50 @@ Placify/
 │ └── App.js
 └── README.md
 
-## 🛠️ Setup Instructions
 
-### 1️⃣ Clone the Repository
+## 🛠️ Setup Instructions
 ```bash
+# 1️⃣ Clone the Repository
 git clone https://github.com/ujjawal-singh1/Placify.git
 cd Placify
 
-2️⃣ Backend (Spring Boot + MongoDB)
+# 2️⃣ Backend (Spring Boot + MongoDB)
 cd backend
 
+# Configure MongoDB in application.properties:
+# spring.data.mongodb.uri=mongodb://localhost:27017/placify_db
+# spring.data.mongodb.database=placify_db
 
-Configure MongoDB in application.properties:
-
-spring.data.mongodb.uri=mongodb://localhost:27017/placify_db
-spring.data.mongodb.database=placify_db
-
-
-Build & run the backend:
-
+# Build & run the backend
 mvn spring-boot:run
 
-3️⃣ Frontend (React)
+# 3️⃣ Frontend (React)
 cd ../frontend
 npm install
 npm start
 
+# Open in browser: http://localhost:3000
 
-Open in browser: http://localhost:3000
 
 🧠 Future Enhancements
-
-Email/SMS notifications for students and recruiters.
-
-AI-based resume screening & job recommendation.
-
-Advanced analytics dashboards for admins.
-
-Mobile app or PWA for real-time updates.
-
-Timed quizzes with leaderboard for student assessment.
+- Email/SMS notifications for students and recruiters
+- AI-based resume screening & job recommendations
+- Advanced analytics dashboards for admins
+- Mobile app or PWA for real-time updates
+- Timed quizzes with leaderboard for student assessments
 
 👨‍💻 Team Members
-Name	Role
-Ujjawal Kumar	Full Stack Lead (React + Spring Boot + MongoDB)
-Mana Panda	Frontend Developer (React + UI/UX)
-Rohit Soni	Backend & Database (MongoDB)
-Shubham Sharma	UI/UX & Testing
-🧑‍🏫 Guided By
+Name           | Role
+---------------|---------------------------------------
+Ujjawal Kumar  | Full Stack Lead (React + Spring Boot + MongoDB)
+Mana Panda     | Frontend Developer (React + UI/UX)
+Rohit Soni     | Backend & Database (MongoDB)
+Shubham Sharma | UI/UX & Testing
 
+🧑‍🏫 Guided By
 Tapas Pal Sir
-Department of Information Technology,
+Department of Information Technology
 Asansol Engineering College
+
+🪪 License
+This project is for educational purposes.
