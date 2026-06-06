@@ -1,0 +1,23 @@
+@import "tailwindcss";
+
+/* Enable class-based dark mode in Tailwind v4 */
+@config "../tailwind.config.js";
+
+@keyframes float {
+  0% {
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    transform: translateY(-4px) scale(1.08); /* move + size increase */
+  }
+  100% {
+    transform: translateY(0) scale(1);
+  }
+}
+
+.logo-animate {
+  animation: float 3s ease-in-out infinite;
+}
+.logo-outline {
+  filter: drop-shadow(0 0 2px black) drop-shadow(0 0 4px black);
+}
