@@ -167,8 +167,16 @@ Placify/
 │   │   └── train_phone_model.py   # Phone model training script
 │   └── weights/                   # Trained model weights (.h5)
 │
-└── compiler-engine/               # Docker-based code execution
+├── compiler-engine/               # Docker-sandboxed code execution
+│   ├── Dockerfile                 # Python 3.11 + G++ + JDK + Node.js image
+│   └── runner.sh                  # Language router (python|cpp|java|javascript)
 ```
+
+**Compiler Engine** — A lightweight Docker container that compiles and executes student code in an isolated sandbox. The Spring Boot backend spins up a container per execution, mounts the code file, and captures stdout/stderr. Supports:
+- 🐍 **Python** — `python3` direct execution
+- ⚙️ **C++** — `g++` compile → run binary
+- ☕ **Java** — `javac` compile → `java` run
+- 🟨 **JavaScript** — `node` direct execution
 
 ---
 
@@ -265,7 +273,21 @@ python app.py
 # → Swagger docs at http://localhost:5000/docs
 ```
 
-### 4️⃣ Frontend (React + Vite)
+### 4️⃣ Compiler Engine (Docker)
+```bash
+cd compiler-engine
+
+# Build the Docker image
+docker build -t placify-compiler .
+
+# Verify it works (example: run a Python file)
+echo "print('Hello Placify')" > /tmp/test.py
+docker run --rm -v /tmp/test.py:/app/test.py placify-compiler python /app/test.py
+# → Hello Placify
+```
+> The Spring Boot backend automatically uses this image to run student code in isolated containers.
+
+### 5️⃣ Frontend (React + Vite)
 ```bash
 cd Frontend
 
@@ -277,7 +299,7 @@ npm run dev
 # → http://localhost:5173
 ```
 
-### 5️⃣ Train ML Models (Optional — improves accuracy)
+### 6️⃣ Train ML Models (Optional — improves accuracy)
 ```bash
 cd ml-service
 
