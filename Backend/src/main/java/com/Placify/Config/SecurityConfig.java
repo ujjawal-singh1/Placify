@@ -71,6 +71,7 @@ public class SecurityConfig {
                         // ADMIN only
                         .requestMatchers("/admin/**").hasAuthority("ADMIN")
                         .requestMatchers("/api/admin/**").hasAuthority("ADMIN")
+                        .requestMatchers("/api/plagiarism/**").hasAuthority("ADMIN")
 
                         // Everything else requires authentication
                         .anyRequest().authenticated()

@@ -274,29 +274,67 @@ const AdminProctoringReports = () => {
                 </div>
               ) : (
                 <div className="space-y-4">
-                  {proctorModal.logs.map((log, i) => (
+                  {proctorModal.logs.map((log, i) => {
+                    const sevColors = {
+                      high: "bg-rose-500/10 text-rose-500 border-rose-500/20",
+                      medium: "bg-amber-500/10 text-amber-500 border-amber-500/20",
+                      low: "bg-slate-100 dark:bg-slate-700 text-slate-500 border-slate-200 dark:border-slate-600",
+                    };
+                    const sevClass = sevColors[log.severity] || sevColors.low;
+
+                    // prefer Cloudinary URL, fall back to base64
+                    const imgSrc = log.imageUrl
+                      ? log.imageUrl
+                      : log.imageBase64
+                        ? (log.imageBase64.startsWith("data:") ? log.imageBase64 : `data:image/png;base64,${log.imageBase64}`)
+                        : null;
+
+                    return (
                     <div
                       key={log.id || i}
                       className="p-4 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900/50"
                     >
-                      <div className="flex items-center justify-between mb-3">
+                      <div className="flex items-center justify-between mb-2">
                         <span className="flex items-center gap-2 text-sm font-bold text-rose-500">
                           <AlertTriangle size={14} />
                           {log.issue || "Unknown Issue"}
                         </span>
-                        <span className="text-xs text-slate-500">
-                          {log.timestamp ? new Date(log.timestamp).toLocaleString() : "N/A"}
-                        </span>
+                        <div className="flex items-center gap-2">
+                          {log.severity && (
+                            <span className={`px-2 py-0.5 rounded-md text-[10px] font-bold uppercase border ${sevClass}`}>
+                              {log.severity}
+                            </span>
+                          )}
+                          <span className="text-xs text-slate-500">
+                            {log.timestamp ? new Date(log.timestamp).toLocaleString() : "N/A"}
+                          </span>
+                        </div>
                       </div>
-                      {log.imageBase64 && (
+
+                      {/* ML detection details */}
+                      <div className="flex gap-3 mb-2 flex-wrap">
+                        {log.confidence != null && (
+                          <span className="text-[10px] font-semibold text-slate-400 bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded">
+                            Confidence: {(log.confidence * 100).toFixed(0)}%
+                          </span>
+                        )}
+                        {log.detectedObjects && (
+                          <span className="text-[10px] font-semibold text-amber-500 bg-amber-50 dark:bg-amber-500/10 px-2 py-0.5 rounded">
+                            Objects: {log.detectedObjects}
+                          </span>
+                        )}
+                      </div>
+
+                      {imgSrc && (
                         <img
-                          src={log.imageBase64.startsWith("data:") ? log.imageBase64 : `data:image/png;base64,${log.imageBase64}`}
-                          alt="Proctor Screenshot"
+                          src={imgSrc}
+                          alt="Violation Screenshot"
                           className="w-full max-h-48 object-cover rounded-lg border border-slate-200 dark:border-slate-700"
                         />
                       )}
                     </div>
-                  ))}
+                    );
+                  })}
                 </div>
               )}
             </div>

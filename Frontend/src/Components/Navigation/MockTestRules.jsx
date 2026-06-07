@@ -156,6 +156,26 @@ const MockTestRules = () => {
                 </div>
                 <div className="flex gap-4">
                   <div className="mt-1"><AlertCircle size={18} className="text-rose-500" /></div>
+                  <p className="text-sm text-slate-300"><b>AI Face Monitoring:</b> Custom ML models track your face throughout the exam. Absence or multiple faces will be flagged.</p>
+                </div>
+                <div className="flex gap-4">
+                  <div className="mt-1"><AlertCircle size={18} className="text-rose-500" /></div>
+                  <p className="text-sm text-slate-300"><b>Phone &amp; Object Detection:</b> AI-powered detection identifies mobile phones and prohibited materials in real time.</p>
+                </div>
+                <div className="flex gap-4">
+                  <div className="mt-1"><AlertCircle size={18} className="text-rose-500" /></div>
+                  <p className="text-sm text-slate-300"><b>Gaze Tracking:</b> Head pose estimation monitors where you are looking. Sustained distraction is logged.</p>
+                </div>
+                <div className="flex gap-4">
+                  <div className="mt-1"><AlertCircle size={18} className="text-rose-500" /></div>
+                  <p className="text-sm text-slate-300"><b>Violation Screenshots:</b> A webcam snapshot is automatically captured and stored for every violation.</p>
+                </div>
+                <div className="flex gap-4">
+                  <div className="mt-1"><AlertCircle size={18} className="text-rose-500" /></div>
+                  <p className="text-sm text-slate-300"><b>Plagiarism Analysis:</b> Answer patterns are analyzed across all submissions to detect copying.</p>
+                </div>
+                <div className="flex gap-4">
+                  <div className="mt-1"><AlertCircle size={18} className="text-rose-500" /></div>
                   <p className="text-sm text-slate-300"><b>Auto-Submission:</b> Reaching 5 violations will result in immediate termination.</p>
                 </div>
               </div>

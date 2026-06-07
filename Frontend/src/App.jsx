@@ -31,6 +31,7 @@ import {
   CodingArena,
   AdminCodingProblems,
   AdminProctoringReports,
+  AdminPlagiarismReports,
 } from "./Components/routes";
 
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
@@ -147,6 +148,7 @@ const router = createBrowserRouter([
       {path:"feedback",  element: <AdminFeedback/>},
       { path: "auditlogs", element: <AuditLogs /> },
       { path: "proctoring", element: <AdminProctoringReports /> },
+      { path: "plagiarism", element: <AdminPlagiarismReports /> },
     ],
   },
 ]);

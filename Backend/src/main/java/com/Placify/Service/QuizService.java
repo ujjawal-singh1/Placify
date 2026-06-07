@@ -3,15 +3,16 @@ package com.Placify.Service;
 import com.Placify.Entity.*;
 import com.Placify.Repository.*;
 
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.Map;
 
 @Service
 public class QuizService {
@@ -27,6 +28,13 @@ public class QuizService {
 
     @Autowired
     private ProctorLogRepo proctorLogRepo;
+
+    @Autowired
+    private Cloudinary cloudinary;
+
+    // issue types grouped by severity for proctoring classification
+    private static final Set<String> HIGH_SEVERITY = Set.of("multiple_faces", "phone_detected");
+    private static final Set<String> MEDIUM_SEVERITY = Set.of("no_face", "looking_away", "suspicious_movement");
 
     // -------------------------------------------------------------
     // CREATE QUIZ
@@ -182,10 +190,38 @@ public class QuizService {
 
     // -------------------------------------------------------------
     // SAVE PROCTOR LOG (screenshots / warnings)
+    // Computes severity automatically, uploads image to Cloudinary
     // -------------------------------------------------------------
     public ResponseEntity<String> saveProctorLog(ProctorLog log) {
 
         log.setTimestamp(Instant.now());
+
+        // figure out the severity from the issue type
+        String issue = log.getIssue();
+        if (issue != null && HIGH_SEVERITY.contains(issue)) {
+            log.setSeverity("high");
+        } else if (issue != null && MEDIUM_SEVERITY.contains(issue)) {
+            log.setSeverity("medium");
+        } else {
+            log.setSeverity("low");
+        }
+
+        // upload the screenshot to Cloudinary if present, no point keeping base64 in mongo
+        if (log.getImageBase64() != null && !log.getImageBase64().isEmpty()) {
+            try {
+                Map uploadResult = cloudinary.uploader().upload(
+                        "data:image/jpeg;base64," + log.getImageBase64(),
+                        ObjectUtils.asMap("folder", "proctoring", "resource_type", "image")
+                );
+                String imageUrl = (String) uploadResult.get("secure_url");
+                log.setImageUrl(imageUrl);
+                log.setImageBase64(null); // clear base64 to save storage
+            } catch (Exception e) {
+                // don't fail the whole request if upload didn't work
+                // TODO: maybe queue for retry later?
+                e.printStackTrace();
+            }
+        }
 
         proctorLogRepo.save(log);
 

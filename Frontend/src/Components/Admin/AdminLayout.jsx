@@ -13,6 +13,7 @@ import {
   Sun, 
   Moon,
   ShieldCheck,
+  ShieldAlert,
   ChevronRight,
   Code2
 } from "lucide-react";
@@ -117,6 +118,7 @@ const AdminLayout = () => {
                 {navLink("/admin/auditlogs", "Audit Logs", <History />)}
                 {navLink("/admin/feedback", "User Feedback", <MessageSquare />)}
                 {navLink("/admin/proctoring", "Proctoring Reports", <ShieldCheck />)}
+                {navLink("/admin/plagiarism", "Plagiarism Reports", <ShieldAlert />)}
             </div>
           </div>
         </nav>
