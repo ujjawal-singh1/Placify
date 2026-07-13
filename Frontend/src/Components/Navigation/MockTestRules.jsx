@@ -57,7 +57,7 @@ const MockTestRules = () => {
   }
 
   return (
-    <div className="min-h-screen w-full bg-[#0f172a] text-slate-200 flex items-center justify-center px-6 py-12 relative overflow-hidden">
+    <div className="min-h-screen w-full bg-[#0f172a] text-slate-200 flex items-center justify-center px-6 py-12 relative overflow-x-hidden">
 
       {/* Background Glows */}
       <div className="absolute top-0 -left-20 w-96 h-96 bg-blue-600/10 blur-[120px] rounded-full" />

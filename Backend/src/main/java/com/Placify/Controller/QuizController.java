@@ -144,4 +144,11 @@ public class QuizController {
         return quizService.getProctorLogsByAttempt(attemptId);
     }
 
+    @GetMapping("/proctor/quiz/{quizId}/user/{userId}")
+    public ResponseEntity<List<ProctorLog>> getProctorByQuizAndUser(
+            @PathVariable String quizId,
+            @PathVariable String userId) {
+        return quizService.getProctorLogsByQuizAndUser(quizId, userId);
+    }
+
 }

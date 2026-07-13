@@ -27,8 +27,11 @@ const AdminProctoringReports = () => {
   const [expandedQuiz, setExpandedQuiz] = useState(null);
   const [proctorModal, setProctorModal] = useState(null); // { attemptId, logs, loading }
 
+  const token = localStorage.getItem("token");
+  const headers = { Authorization: `Bearer ${token}` };
+
   useEffect(() => {
-    fetch(`${backendUrl}/quiz-attempt/all`)
+    fetch(`${backendUrl}/quiz-attempt/all`, { headers })
       .then((r) => r.json())
       .then((data) => {
         setAttempts(Array.isArray(data) ? data : []);
@@ -49,14 +52,28 @@ const AdminProctoringReports = () => {
     g.quizTitle.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  const openProctorLogs = async (attemptId) => {
-    setProctorModal({ attemptId, logs: [], loading: true });
+  const openProctorLogs = async (attempt) => {
+    setProctorModal({ attemptId: attempt.id, logs: [], loading: true });
     try {
-      const res = await fetch(`${backendUrl}/quiz/proctor/attempt/${attemptId}`);
-      const logs = await res.json();
-      setProctorModal({ attemptId, logs: Array.isArray(logs) ? logs : [], loading: false });
+      // First try by attempt ID
+      const res = await fetch(`${backendUrl}/quiz/proctor/attempt/${attempt.id}`, { headers });
+      let logs = await res.json();
+      logs = Array.isArray(logs) ? logs : [];
+
+      // Fallback: proctor hook stores logs with attemptId = quizId, not the actual attempt ID
+      // So if nothing found, try querying by quizId + userId
+      if (logs.length === 0 && attempt.quizId && attempt.userId) {
+        const fallbackRes = await fetch(
+          `${backendUrl}/quiz/proctor/quiz/${encodeURIComponent(attempt.quizId)}/user/${encodeURIComponent(attempt.userId)}`,
+          { headers }
+        );
+        const fallbackLogs = await fallbackRes.json();
+        logs = Array.isArray(fallbackLogs) ? fallbackLogs : [];
+      }
+
+      setProctorModal({ attemptId: attempt.id, logs, loading: false });
     } catch {
-      setProctorModal({ attemptId, logs: [], loading: false });
+      setProctorModal({ attemptId: attempt.id, logs: [], loading: false });
     }
   };
 
@@ -217,7 +234,7 @@ const AdminProctoringReports = () => {
                                 </td>
                                 <td className="px-6 py-4">
                                   <button
-                                    onClick={() => openProctorLogs(attempt.id)}
+                                    onClick={() => openProctorLogs(attempt)}
                                     className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 text-xs font-bold hover:bg-indigo-100 dark:hover:bg-indigo-500/20 transition-all border border-indigo-100 dark:border-indigo-500/20"
                                   >
                                     <Eye size={13} />

@@ -7,4 +7,5 @@ import java.util.List;
 public interface ProctorLogRepo extends MongoRepository<ProctorLog, String> {
     List<ProctorLog> findByUserId(String userId);
     List<ProctorLog> findByAttemptId(String attemptId);
+    List<ProctorLog> findByAttemptIdAndUserId(String attemptId, String userId);
 }

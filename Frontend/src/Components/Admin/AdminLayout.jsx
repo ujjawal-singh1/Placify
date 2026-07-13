@@ -5,6 +5,7 @@ import {
   Building2, 
   BookMarked, 
   ClipboardList, 
+  BarChart3,
   HelpCircle, 
   Users as UsersIcon, 
   History, 
@@ -107,6 +108,7 @@ const AdminLayout = () => {
             <div className="space-y-1">
                 {navLink("/admin/quiz", "Quizzes", <ClipboardList />)}
                 {navLink("/admin/questions", "Questions", <HelpCircle />)}
+                {navLink("/admin/attempts", "Marks", <BarChart3 />)}
                 {navLink("/admin/coding-problems", "Coding Problems", <Code2 />)}
             </div>
           </div>

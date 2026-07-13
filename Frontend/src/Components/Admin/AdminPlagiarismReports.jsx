@@ -27,7 +27,10 @@ const AdminPlagiarismReports = () => {
   const [quizzes, setQuizzes] = useState([]);
 
   const token = localStorage.getItem("token");
-  const headers = { Authorization: `Bearer ${token}` };
+  const headers = {
+    Authorization: `Bearer ${token}`,
+    "Content-Type": "application/json",
+  };
 
   // fetch all plagiarism results + quiz list for the "analyze" feature
   useEffect(() => {
@@ -59,9 +62,21 @@ const AdminPlagiarismReports = () => {
           headers,
         }).then((r) => r.json());
         setResults(Array.isArray(updated) ? updated : []);
+      } else {
+        // show the error from the backend
+        const errorData = await res.text();
+        let errorMsg = "Analysis failed";
+        try {
+          const parsed = JSON.parse(errorData);
+          errorMsg = parsed.message || parsed.error || errorData;
+        } catch {
+          errorMsg = errorData;
+        }
+        alert(`⚠ Plagiarism Analysis: ${errorMsg}`);
       }
     } catch (err) {
       console.error("Analysis failed:", err);
+      alert("⚠ Could not reach the server. Make sure the backend is running.");
     }
     setAnalyzing(null);
   };

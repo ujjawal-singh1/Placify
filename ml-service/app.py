@@ -17,7 +17,7 @@ from typing import Optional
 
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel, Field
+from pydantic import AliasChoices, BaseModel, ConfigDict, Field
 
 from utils.frame_decoder import decode_base64_frame, resize_frame
 from models.face_guard import FaceGuard
@@ -73,11 +73,15 @@ class CalibrateRequest(BaseModel):
     session_id: str
 
 class AttemptData(BaseModel):
-    user_id: str
+    model_config = ConfigDict(populate_by_name=True)
+
+    user_id: str = Field(validation_alias=AliasChoices("user_id", "userId"))
     responses: dict
 
 class PlagiarismRequest(BaseModel):
-    quiz_id: str
+    model_config = ConfigDict(populate_by_name=True)
+
+    quiz_id: str = Field(validation_alias=AliasChoices("quiz_id", "quizId"))
     attempts: list[AttemptData]
 
 class FaceResponse(BaseModel):

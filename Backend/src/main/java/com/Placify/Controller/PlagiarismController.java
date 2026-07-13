@@ -19,9 +19,15 @@ public class PlagiarismController {
     // Trigger plagiarism analysis for all attempts on a quiz
     // --------------------------------------------------------
     @PostMapping("/analyze/{quizId}")
-    public ResponseEntity<List<PlagiarismResult>> analyzeQuiz(@PathVariable String quizId) {
-        List<PlagiarismResult> results = plagiarismService.analyzeQuiz(quizId);
-        return ResponseEntity.ok(results);
+    public ResponseEntity<?> analyzeQuiz(@PathVariable String quizId) {
+        try {
+            List<PlagiarismResult> results = plagiarismService.analyzeQuiz(quizId);
+            return ResponseEntity.ok(results);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(
+                java.util.Map.of("error", e.getMessage())
+            );
+        }
     }
 
     // --------------------------------------------------------

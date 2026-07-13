@@ -18,9 +18,11 @@ const Users = () => {
   const [searchTerm, setSearchTerm] = useState("");
 
   const adminEmail = JSON.parse(localStorage.getItem("user"))?.email || "admin@unknown.com";
+  const token = localStorage.getItem("token");
+  const authHeaders = { Authorization: `Bearer ${token}` };
 
   useEffect(() => {
-    fetch(`${API_BASE_URL}/api/admin/users`)
+    fetch(`${API_BASE_URL}/api/admin/users`, { headers: authHeaders })
       .then((res) => res.json())
       .then((data) => {
         if (Array.isArray(data)) setUsers(data);
@@ -41,12 +43,12 @@ const Users = () => {
     }
     if (!window.confirm(`Are you sure you want to delete ${user.name}?`)) return;
 
-    fetch(`${API_BASE_URL}/api/admin/users/${user.id}?adminEmail=${adminEmail}`, { method: "DELETE" })
+    fetch(`${API_BASE_URL}/api/admin/users/${user.id}?adminEmail=${adminEmail}`, { method: "DELETE", headers: authHeaders })
       .then(() => setUsers((prev) => prev.filter((u) => u.id !== user.id)));
   };
 
   const changeRole = (id, newRole) => {
-    fetch(`${API_BASE_URL}/api/admin/users/${id}/role?role=${newRole}&adminEmail=${adminEmail}`, { method: "PUT" })
+    fetch(`${API_BASE_URL}/api/admin/users/${id}/role?role=${newRole}&adminEmail=${adminEmail}`, { method: "PUT", headers: authHeaders })
       .then((res) => res.json())
       .then((updatedUser) => {
         setUsers((prev) => prev.map((u) => (u.id === updatedUser.id ? updatedUser : u)));
@@ -54,7 +56,7 @@ const Users = () => {
   };
 
   const toggleBlock = (id) => {
-    fetch(`${API_BASE_URL}/api/admin/users/${id}/block?adminEmail=${adminEmail}`, { method: "PUT" })
+    fetch(`${API_BASE_URL}/api/admin/users/${id}/block?adminEmail=${adminEmail}`, { method: "PUT", headers: authHeaders })
       .then((res) => res.json())
       .then((updatedUser) => {
         setUsers((prev) => prev.map((u) => (u.id === updatedUser.id ? updatedUser : u)));
@@ -128,7 +130,18 @@ const Users = () => {
                   <tr key={u.id} className="group hover:bg-slate-50/50 dark:hover:bg-slate-700/20 transition-colors">
                     <td className="px-6 py-5">
                       <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-slate-100 to-slate-200 dark:from-slate-700 dark:to-slate-600 flex items-center justify-center font-black text-slate-500 dark:text-slate-300">
+                        {u.profileImage ? (
+                          <img
+                            src={u.profileImage}
+                            alt={u.name}
+                            className="w-10 h-10 rounded-xl object-cover ring-2 ring-slate-100 dark:ring-slate-700"
+                            onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'flex'; }}
+                          />
+                        ) : null}
+                        <div
+                          className="w-10 h-10 rounded-xl bg-gradient-to-tr from-slate-100 to-slate-200 dark:from-slate-700 dark:to-slate-600 flex items-center justify-center font-black text-slate-500 dark:text-slate-300"
+                          style={{ display: u.profileImage ? 'none' : 'flex' }}
+                        >
                           {u.name.charAt(0)}
                         </div>
                         <div>

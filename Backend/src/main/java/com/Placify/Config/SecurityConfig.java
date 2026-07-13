@@ -70,6 +70,7 @@ public class SecurityConfig {
 
                         // ADMIN only
                         .requestMatchers("/admin/**").hasAuthority("ADMIN")
+                        .requestMatchers("/api/admin/users/profile-image").authenticated()
                         .requestMatchers("/api/admin/**").hasAuthority("ADMIN")
                         .requestMatchers("/api/plagiarism/**").hasAuthority("ADMIN")
 

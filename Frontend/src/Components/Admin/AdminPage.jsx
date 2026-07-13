@@ -11,7 +11,8 @@ import {
   ClipboardList, 
   Mail,
   ArrowRight,
-  ShieldCheck
+  ShieldCheck,
+  Trophy
 } from "lucide-react";
 
 const AdminPage = () => {
@@ -47,6 +48,12 @@ const AdminPage = () => {
       desc: "Create quizzes and questions for mock tests.",
       icon: <ClipboardList className="text-amber-500" />,
       path: "/admin/quiz",
+    },
+    {
+      title: "View Marks",
+      desc: "Review student quiz scores and attempt records.",
+      icon: <Trophy className="text-rose-500" />,
+      path: "/admin/attempts",
     },
     {
       title: "User Feedback",
@@ -118,7 +125,7 @@ const AdminPage = () => {
 
       {/* ACTIONS GRID */}
       
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
         {actions.map((card, index) => (
           <motion.div
             key={index}

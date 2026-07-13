@@ -44,16 +44,16 @@ const Profile = () => {
   };
 
   const handleSave = async () => {
-    setUser({ ...formData });
+    // Read the latest user from localStorage to avoid stale data
+    const latestUser = JSON.parse(localStorage.getItem("user") || "{}");
 
-    localStorage.setItem(
-      "user",
-      JSON.stringify({
-        ...parsedUser,
-        name: formData.name,
-        email: formData.email,
-      })
-    );
+    // Update name/email in localStorage
+    const updatedStorage = {
+      ...latestUser,
+      name: formData.name,
+      email: formData.email,
+    };
+    localStorage.setItem("user", JSON.stringify(updatedStorage));
 
     if (imageFile) {
       const form = new FormData();
@@ -71,14 +71,21 @@ const Profile = () => {
           }
         );
 
-        setUser((prev) => ({ ...prev, avatar: res.data.profileImage }));
+        const newImageUrl = res.data.profileImage;
+        // Update both state and localStorage with the new image
+        setUser((prev) => ({ ...prev, ...formData, avatar: newImageUrl }));
+        const freshUser = JSON.parse(localStorage.getItem("user") || "{}");
         localStorage.setItem(
           "user",
-          JSON.stringify({ ...parsedUser, profileImage: res.data.profileImage })
+          JSON.stringify({ ...freshUser, profileImage: newImageUrl })
         );
+        setImageFile(null);
       } catch (err) {
         console.error("Image upload failed", err);
       }
+    } else {
+      // No image change — just update name/email in state
+      setUser((prev) => ({ ...prev, ...formData }));
     }
     setEditMode(false);
   };

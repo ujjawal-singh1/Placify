@@ -11,8 +11,9 @@ const FullScreenLayout = () => {
       
       {/* This Layout acts as a clean slate. 
           The 'Outlet' here will render the Quiz, MockTestRules, or Compiler.
+          overflow-y-auto allows the child pages to scroll within the locked viewport.
       */}
-      <div className="relative h-full w-full flex flex-col">
+      <div className="relative h-full w-full flex flex-col overflow-y-auto">
         <Outlet />
       </div>
 

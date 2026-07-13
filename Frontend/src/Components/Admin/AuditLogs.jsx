@@ -21,6 +21,8 @@ const AuditLogs = () => {
   const [actionFilter, setActionFilter] = useState("");
   const [adminFilter, setAdminFilter] = useState("");
 
+  const token = localStorage.getItem("token");
+
   const fetchLogs = () => {
     setLoading(true);
     const params = new URLSearchParams({
@@ -30,7 +32,9 @@ const AuditLogs = () => {
       admin: adminFilter,
     });
 
-    fetch(`${API_BASE_URL}/api/admin/audit-logs?${params}`)
+    fetch(`${API_BASE_URL}/api/admin/audit-logs?${params}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    })
       .then((res) => res.json())
       .then((data) => {
         setLogs(data.content || []);

@@ -235,6 +235,10 @@ public class QuizService {
         return ResponseEntity.ok(proctorLogRepo.findByAttemptId(attemptId));
     }
 
+    public ResponseEntity<List<ProctorLog>> getProctorLogsByQuizAndUser(String quizId, String userId) {
+        return ResponseEntity.ok(proctorLogRepo.findByAttemptIdAndUserId(quizId, userId));
+    }
+
     // -------------------------------------------------------------
     // OPTIONAL: UPDATE QUIZ QUESTIONS
     // -------------------------------------------------------------

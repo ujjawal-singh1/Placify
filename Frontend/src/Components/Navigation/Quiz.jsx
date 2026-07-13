@@ -170,6 +170,7 @@ const Quiz = () => {
       const finalScore = await res.json();
       setScore(finalScore);
 
+      // Save to QuizAttempt (score tracking + proctoring stats)
       await fetch(`${API_BASE_URL}/quiz-attempt`, {
         method: "POST",
         headers: {
@@ -182,6 +183,26 @@ const Quiz = () => {
           score: finalScore,
           totalMarks: questions.length,
           cheatCount: proctoring.cheatCount,
+        }),
+      });
+
+      // Also save to Attempt with full responses (needed for plagiarism analysis)
+      const user = JSON.parse(localStorage.getItem("user") || "{}");
+      const responsesMap = {};
+      questions.forEach((q, i) => {
+        responsesMap[q.id] =
+          userResponses[i] != null
+            ? [q.option1, q.option2, q.option3, q.option4][userResponses[i]]
+            : null;
+      });
+      await fetch(`${API_BASE_URL}/quiz/attempt/${quizId}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          userId: user.email || "anonymous",
+          score: finalScore,
+          total: questions.length,
+          responses: responsesMap,
         }),
       });
     } catch (err) {

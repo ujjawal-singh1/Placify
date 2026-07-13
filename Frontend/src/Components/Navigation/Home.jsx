@@ -17,7 +17,7 @@ import {
 
 const Home = () => {
   return (
-    <main className="relative min-h-screen overflow-hidden bg-slate-50 dark:bg-[#0f172a] transition-colors duration-500">
+    <main className="relative min-h-screen bg-slate-50 dark:bg-[#0f172a] transition-colors duration-500">
 
       {/* BACKGROUND GRADIENT ANIMATION */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">

@@ -76,7 +76,14 @@ public class UserController {
             @RequestParam("image") MultipartFile image,
             Authentication authentication
     ) {
-        String email = authentication.getName();
+        // JwtFilter sets the principal to the User entity, not the email string
+        Object principal = authentication.getPrincipal();
+        String email;
+        if (principal instanceof com.Placify.Entity.User userPrincipal) {
+            email = userPrincipal.getEmail();
+        } else {
+            email = authentication.getName();
+        }
         return userService.uploadProfileImageByEmail(image, email);
     }
 

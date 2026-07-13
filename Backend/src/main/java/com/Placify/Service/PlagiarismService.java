@@ -40,13 +40,22 @@ public class PlagiarismService {
 
         List<Attempt> attempts = attemptRepo.findByQuizId(quizId);
 
+        if (attempts.isEmpty()) {
+            throw new RuntimeException(
+                "No response data found for this quiz. " +
+                "Students need to take the quiz first (responses are required for plagiarism analysis)."
+            );
+        }
+
         if (attempts.size() < 2) {
-            // need at least two attempts to compare
-            return Collections.emptyList();
+            throw new RuntimeException(
+                "Need at least 2 attempts to compare. Only " + attempts.size() + " attempt(s) found."
+            );
         }
 
         // build the payload: list of { userId, responses }
         List<Map<String, Object>> attemptsPayload = attempts.stream()
+                .filter(a -> a.getResponses() != null && !a.getResponses().isEmpty())
                 .map(a -> {
                     Map<String, Object> entry = new HashMap<>();
                     entry.put("userId", a.getUserId());
@@ -55,33 +64,57 @@ public class PlagiarismService {
                 })
                 .collect(Collectors.toList());
 
+        if (attemptsPayload.size() < 2) {
+            throw new RuntimeException(
+                "Not enough attempts with response data. Found " + attempts.size() +
+                " attempt(s) but only " + attemptsPayload.size() + " have answer responses."
+            );
+        }
+
         Map<String, Object> requestBody = new HashMap<>();
         requestBody.put("quizId", quizId);
         requestBody.put("attempts", attemptsPayload);
 
         // call the FastAPI plagiarism endpoint
-        // TODO: add retry / circuit-breaker for production
-        List<Map<String, Object>> mlResults = webClient.post()
-                .uri(mlServiceUrl + "/api/plagiarism/analyze")
-                .bodyValue(requestBody)
-                .retrieve()
-                .bodyToMono(new ParameterizedTypeReference<List<Map<String, Object>>>() {})
-                .block(); // blocking here is fine for now, could switch to reactive later
+        // The ML service returns: { quiz_id, results: [...], flagged_count, total_pairs_analyzed }
+        // so we need to parse the wrapper and extract the "results" array
+        Map<String, Object> mlResponse;
+        try {
+            mlResponse = webClient.post()
+                    .uri(mlServiceUrl + "/api/plagiarism/analyze")
+                    .bodyValue(requestBody)
+                    .retrieve()
+                    .bodyToMono(new ParameterizedTypeReference<Map<String, Object>>() {})
+                    .block();
+        } catch (Exception e) {
+            throw new RuntimeException(
+                "ML service is not reachable at " + mlServiceUrl +
+                ". Make sure the ML service is running. Error: " + e.getMessage()
+            );
+        }
+
+        if (mlResponse == null || !mlResponse.containsKey("results")) {
+            return Collections.emptyList();
+        }
+
+        @SuppressWarnings("unchecked")
+        List<Map<String, Object>> mlResults = (List<Map<String, Object>>) mlResponse.get("results");
 
         if (mlResults == null || mlResults.isEmpty()) {
             return Collections.emptyList();
         }
 
         // parse & persist each result
+        // NOTE: ML service returns snake_case keys (user_id_1, similarity_score, etc.)
         List<PlagiarismResult> savedResults = new ArrayList<>();
         for (Map<String, Object> r : mlResults) {
             PlagiarismResult result = PlagiarismResult.builder()
                     .quizId(quizId)
-                    .userId1((String) r.get("userId1"))
-                    .userId2((String) r.get("userId2"))
-                    .similarityScore(((Number) r.get("similarityScore")).doubleValue())
-                    .matchedAnswers(((Number) r.get("matchedAnswers")).intValue())
-                    .totalQuestions(((Number) r.get("totalQuestions")).intValue())
+                    .userId1((String) r.get("user_id_1"))
+                    .userId2((String) r.get("user_id_2"))
+                    .similarityScore(((Number) r.get("similarity_score")).doubleValue())
+                    .matchedAnswers(((Number) r.get("matched_answers")).intValue())
+                    .totalQuestions(((Number) r.get("total_questions")).intValue())
                     .analyzedAt(Instant.now())
                     .flagged((Boolean) r.getOrDefault("flagged", false))
                     .build();
